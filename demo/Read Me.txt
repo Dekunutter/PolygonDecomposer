@@ -1,0 +1,41 @@
+N.B: Before I start, please note that this program is experimental and not all algorithms and settings produce
+useful results, some even resulting in errors (which are correctly handled, don't worry) but the core algorithm
+is incredibly solid and results in fantastic renders and flawless collision masks. This does not mean it is flawless
+though. There are images that will cause triangulation or parsing errors, they may be too complex to easily
+decompose.
+
+--Instructions on how the Polygon Decomposer operates--
+1: Launch the application by double-clicking on the JAR file
+2: Use the Browse button or the textfield beside it to search for an image file that you wish to decompose into a
+polygon. Requisites for decomposable images:
+	- Limit yourself to smaller images. The algorithms used are incredibly intensive and an image more than
+	1000px in width and height could take a few minutes to parse through, depending on settings
+	- All pixels in an image that are TOTALLY opaque will be treated as "holes". They must be completely opaque
+	or else they are considered part of the image. This is intentional design on my part
+3: Select an algorithm. These will scan through the image and simplify the coordinates, removing pixel-perfection
+and straightening edges. I have 4 available and a none option but the only truly sound algorithm is the
+Ramer-Douglas-Peucker algorithm.
+	- Select none if you wish to see the polygon do a pixel perfect decomposition without any image
+	simplification
+4: Decide weather you wish to check the "check holes" checkbox. If enabled this will vastle increase the time it
+takes for the algorithms to parse through the image but it will search and find any holes in the image, allowing
+for more dynamic collision masks (e.g: Try it out with a donut shape)
+5: Enable or disable the double buffer checkbox. This will just force the parsing algorithm to scan the image
+a second time for higher accuracy. Not necessary
+6: Specify a limiter value. This is very important. The higher the limit value the more the selected simplifier
+algorithm will remove vertices and simplify the object. I recommend values from the default (0.2 to about 5.0).
+Very high values will over-simplify your image into something non-recognisable! Try a circular object with a limit
+of 100.0 to see what I mean!
+7: Set an average value. Really this is only used on the experimental algorithms which have dubious results in the
+first place so just ignore it
+8: Click test to generate your new object!
+9: If you are happy with the results use the save button to take your new collision mask and convert it to a JSON
+file of polygon data, which is based on compatible data needed for polygon creation within the Box2D physics engine
+
+--Bonus features--
+1: The toggle renderer button will toggle between your original image (the texture) and the newly generated vertices
+	- Useful for ensuring that the new collision mask lines up well with the original image
+2: The highlight vertices checkbox will put tiny dark-blue circles on all the object's vertices so that you can
+see exactly where the new vertice set is after the simplification algorithm has run
+3: The rendering window can be moved. Right-click and drag to do so!
+4: The rendering window can also be zoomed in on. Use the mouse scroll-wheel for this
